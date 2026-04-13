@@ -7,23 +7,36 @@
 2) поддержка повторного обхода очереди;
 3) реализация ленивых фильтров
 4) корректная работа с большими объёмами задач;
+## Использование генераторов (`yield`)
+В проекте реализованы ленивые фильтры, которые возвращают итераторы с помощью `yield`, а не создают новые списки:
+
+```python
+def filter_by_status(self, status: TaskStatus) -> Iterator[Task]:
+    """Ленивая фильтрация задач по статусу."""
+    for task in self._tasks:
+        if task.status == status:
+            yield task  # задача возвращается по одной, без создания нового списка
+```
+## Преимущества использования yield:
+1) Экономия памяти, то есть задачи не копируются в новый список, а выдаются по одной 
+2) Ленивые вычисления - фильтрация происходит только при итерации
 ## Структура проекта
  <pre>
     .
-    ├── task-queue-lazy-iterators           
-    │   └── src/ 
+    ├── task-queue-lazy-iterators
+    │   └── src/
     │        ├── main.py
     │        ├── task.py
     │        ├── task_queue.py
     │        └── task_queue_iterator.py
     │   ├── tests/
     │   │     └── test_main.py
-    │   ├── uv.lock                           
-    │   ├── report.pdf                       
-    │   ├── .gitignore                     
-    │   ├── .pre-commit-config.yaml           
-    │   ├── README.md                         
-                                              
+    │   ├── uv.lock
+    │   ├── report.pdf
+    │   ├── .gitignore
+    │   ├── .pre-commit-config.yaml
+    │   ├── README.md
+
 </pre>
 ## Запуск тестов:
 pytest tests/test_main.py -v
